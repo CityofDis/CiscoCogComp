@@ -1,0 +1,39 @@
+
+Processes:
+
+cleaning---- done
+
+
+preprocessing --- done
+
+train test split --- done
+
+
+model selection --- done
+
+
+training --- done
+
+
+testing --- ongoing
+
+
+
+EDA:
+
+cleaned data --- ongoing
+
+
+preprocessed --- done
+
+
+model selection --- TBD
+
+
+training --- TBD
+
+
+testing --- TBD
+
+/c/Users/Arghyadeep/.ssh/id_rsa
+
