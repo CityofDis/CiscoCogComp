@@ -32,18 +32,24 @@ def dump_pickle(obj, pickle_name):
         raise TypeError("object to dump must be DataFrame")
     pkl.dump(obj, open(path+pickle_name, "wb"))
 
+def main(cat,n_size,stpwords,class_weight,accuracy,file_results):
+	model = pkl.load(open("../pickles/trained_model.pkl","rb"))
+	data = read_pickle("test_doc_vecs.pkl")
 
-data = read_pickle("test_doc_vecs.pkl")
+	temp = read_pickle("cleaned_test_data.pkl")
 
-temp = read_pickle("cleaned_test_data.pkl")
+	data['labels'] = list(temp['labels'])
 
-data['labels'] = list(temp['labels'])
+	#confusion matrix
+	temp = np.array(data.drop(['labels'],1))
+	y_pred = model.predict(temp)
+	conf_mat = confusion_matrix(data['labels'] ,y_pred)
+	print("Confusion Matrix:\n%s\n"%conf_mat)
 
-#confusion matrix
-temp = np.array(data.drop(['labels'],1))
-y_pred = model.predict(temp)
-conf_mat = confusion_matrix(data['labels'] ,y_pred)
-print("Confusion Matrix:\n%s\n"%conf_mat)
+	report = classification_report(data['labels'], y_pred)
+	print("Classification Report:\n%s\n"%report)
 
-report = classification_report(data['labels'], y_pred)
-print("Classification Report:\n%s\n"%report)
+	file_results.append([model,cat,n_size,accuracy,conf_mat,report,stpwords,class_weight])
+	#cols = ['model','categories', 'sample size', 'accuracy','confustion matrix','accuracy report','stopwords', 'class weight']
+	
+

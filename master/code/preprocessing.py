@@ -123,47 +123,38 @@ def create_df(vectors, labels, name):
     df["labels"] = labels
     dump_pickle(df, name+".pkl")
 
+def main():
+    #need to organize this part
+    labels = read_pickle("cleaned_train_data.pkl")['labels']
+    texts = read_pickle("cleaned_train_data.pkl")['texts']
+    size = 50
 
-#######need to organize this part######
-labels = read_pickle("cleaned_train_data.pkl")['labels']
-texts = read_pickle("cleaned_train_data.pkl")['texts']
-size = 50
-
-test_labels = read_pickle("cleaned_test_data.pkl")['labels']
-test_texts = pkl.load(open("../pickles/cleaned_test_data.pkl","rb"))['texts']
-test = read_pickle("cleaned_test_data.pkl")
-#print(test)
-#print(list(test_texts))
+    test_labels = read_pickle("cleaned_test_data.pkl")['labels']
+    test_texts = pkl.load(open("../pickles/cleaned_test_data.pkl","rb"))['texts']
+    test = read_pickle("cleaned_test_data.pkl")
+    #print(test)
+    #print(list(test_texts))
 
 
-tfs_df, vocab = tf_idf(untokenize(texts))
-dic = w2v(texts, size)
-doc_vecs = d2v(texts, dic, size)
-weighted_doc_vecs = tfidf_d2v(texts, tfs_df, dic, vocab, size)
+    tfs_df, vocab = tf_idf(untokenize(texts))
+    dic = w2v(texts, size)
+    doc_vecs = d2v(texts, dic, size)
+    weighted_doc_vecs = tfidf_d2v(texts, tfs_df, dic, vocab, size)
 
-#creating train dataframes
-create_df(tfs_df.values.tolist(), labels, "tfs_vecs")
-create_df(doc_vecs, labels, "doc_vecs")
-create_df(weighted_doc_vecs, labels, "weighted_doc_vecs")
+    create_df(tfs_df.values.tolist(), labels, "tfs_vecs")
+    create_df(doc_vecs, labels, "doc_vecs")
+    create_df(weighted_doc_vecs, labels, "weighted_doc_vecs")
 
-#creating vectors
-test_tfs_df, test_vocab = tf_idf(untokenize(test_texts))
-test_dic = w2v(test_texts, size)
-test_doc_vecs = d2v(test_texts, test_dic, size)
-test_weighted_doc_vecs = tfidf_d2v(test_texts, test_tfs_df, test_dic, test_vocab, size)
 
-#tsne functions
-tfidf_tsne = tsne(tfs_df)
-d2v_tsne = tsne(doc_vecs)
-weighted_d2v_tsne = tsne(weighted_doc_vecs)
+    test_tfs_df, test_vocab = tf_idf(untokenize(test_texts))
+    test_dic = w2v(test_texts, size)
+    test_doc_vecs = d2v(test_texts, test_dic, size)
+    test_weighted_doc_vecs = tfidf_d2v(test_texts, test_tfs_df, test_dic, test_vocab, size)
 
-#create test dataframes (need to modify test data with vocab)
-create_df(test_tfs_df.values.tolist(), test_labels, "test_tfs_vecs")
-create_df(test_doc_vecs, test_labels, "test_doc_vecs")
-create_df(test_weighted_doc_vecs, test_labels, "test_weighted_doc_vecs")
 
-# create tsne dataframes
-create_df(tfidf_tsne, labels, "tfidf_tsne")
-create_df(d2v_tsne, labels, "d2v_tsne")
-create_df(weighted_d2v_tsne, labels, "weighted_d2v_tsne")
+    create_df(test_tfs_df.values.tolist(), test_labels, "test_tfs_vecs")
+    create_df(test_doc_vecs, test_labels, "test_doc_vecs")
+    create_df(test_weighted_doc_vecs, test_labels, "test_weighted_doc_vecs")
+
+#print(read_pickle("test_doc_vecs.pkl"))
 

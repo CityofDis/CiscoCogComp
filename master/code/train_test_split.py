@@ -32,14 +32,14 @@ def train_test_split(df, split = 0.8):
     dump_pickle(df_train, 'cleaned_train_data.pkl')
     dump_pickle(df_test, 'cleaned_test_data.pkl')
 
+def main():
+    df = read_pickle('cleaned_data.pkl')
+    train_test_split(df)
 
-df = read_pickle('cleaned_data.pkl')
-train_test_split(df)
-
-train = read_pickle("cleaned_train_data.pkl")
-#print(train.head())
-#print(train['labels']) #wtf!!!
-test = read_pickle("cleaned_test_data.pkl")
-#print(test.head()) #works fine
-#print(test["labels"]) #need to fix this thing
+    train = read_pickle("cleaned_train_data.pkl")
+    #print(train.head())
+    #print(train['labels']) #wtf!!!
+    test = read_pickle("cleaned_test_data.pkl")
+    #print(test.head()) #works fine
+    #print(test["labels"]) #need to fix this thing
     

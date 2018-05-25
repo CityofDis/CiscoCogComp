@@ -42,37 +42,18 @@ def test(test_data,model):
     X = np.array(test_data.drop(['labels'],1))
     y = np.array(list(map(int,test_data['labels'])))
     accuracy = model.score(X,y)
+
     return accuracy
 
-######need to create a loop or function for the following code#######
+def main():
+    model = pkl.load(open("../pickles/trained_model.pkl","rb"))
+    data = read_pickle("test_doc_vecs.pkl")
 
-#Testing for document vectors
-model_doc_vecs = pkl.load(open("../pickles/trained_model_doc_vecs.pkl","rb"))
-data_doc_vecs = read_pickle("test_doc_vecs.pkl")
+    temp = read_pickle("cleaned_test_data.pkl")
 
-temp = read_pickle("cleaned_test_data.pkl")
-
-data_doc_vecs['labels'] = list(temp['labels']) #why the fuck do I have to do this!!!
-print("test accuracy is " + str(test(data_doc_vecs,model_doc_vecs)*100) + "%" )
-
-#Testing for tfidf vectors
-model_tfidf_vecs = pkl.load(open("../pickles/trained_model_tfidf_vecs.pkl","rb"))
-data_tfidf_vecs = read_pickle("test_tfs_vecs.pkl")
-
-temp = read_pickle("cleaned_test_data.pkl")
-
-data_tfidf_vecs['labels'] = list(temp['labels']) #why the fuck do I have to do this!!!
-#print("test accuracy is on document vectors is " + str(test(data_tfidf_vecs,model_tfidf_vecs)*100) + "%" )
-
-#testing for weighted document vectors
-model_weighted_doc_vecs = pkl.load(open("../pickles/trained_model_weighted_doc_vecs.pkl","rb"))
-data_weighted_doc_vecs = read_pickle("test_weighted_doc_vecs.pkl")
-
-temp = read_pickle("cleaned_test_data.pkl")
-
-data_weighted_doc_vecs['labels'] = list(temp['labels']) #why the fuck do I have to do this!!!
-#print("test accuracy is on weighted document vectors is " + str(test(data_weighted_doc_vecs,model_weighted_doc_vecs)*100) + "%" )
-
+    data['labels'] = list(temp['labels']) #why the fuck do I have to do this!!!
+    print("test accuracy is " + str(test(data,model)*100) + "%" )
+    return str(test(data,model)*100)
 
 
 

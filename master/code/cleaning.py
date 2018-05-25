@@ -11,10 +11,12 @@ import sys
 print("cleaning data...")
 # read in .csv
 # needs exception for non-existant file #exception needs to be modified!
-def read_file(filename, texts, labels, encoding = "utf-8"):
+def read_file(filename, texts, labels, n_size):
     path = "../data/"
     try:
-        data = pd.read_csv(path+filename, encoding = encoding)
+        data = pd.read_csv(path+filename, encoding = "utf-8")
+        if n_size != 556:
+            data.sample(n_size)
         docs = data[texts]
         labels = data[labels]
         return docs, labels
@@ -58,7 +60,7 @@ def number_filter(texts, custom_dict = []):
         filtered_docs.append(filtered_doc)
     return filtered_docs
 
-def drop_filter(texts, stop_words = list(stopwords.words('english')), custom_sw = []):
+def drop_filter(texts, stop_words , custom_sw):
     stop_words = set(stop_words).union(set(custom_sw))
     filtered_docs = []
     for doc in texts:
@@ -89,16 +91,30 @@ def create_df(texts, labels):
     dump_pickle(df, 'cleaned_data.pkl')
 
 
-filename = "labeled_data.csv"#input("enter .csv: ")
-texts = "original_post"#input("enter text field name: ")
-label = "5CAT"#input("enter label field name: ")
-texts, labels = read_file(filename, texts, label)
+def main(cat,n_size,stpwords):
+    filename = "labeled_data.csv"#input("enter .csv: ")
+    texts = "original_post"#input("enter text field name: ")
+    #label = "5CAT"#input("enter label field name: ")
+    texts, labels = read_file(filename, texts, cat, n_size)
     
 
-    # missing logic for handling drop_set vs keep_set
-filtered_texts = pre_clean(texts)
-filtered_texts = number_filter(filtered_texts)
-filtered_texts = drop_filter(filtered_texts)
-    
-create_df(filtered_texts,labels)
+        # missing logic for handling drop_set vs keep_set
+
+    #create lists
+    stop_words = []
+    custom_sw = []
+
+    if stpwords == 1:
+        stop_words = list(stopwords.words('english'))
+
+    if stpwords == 2:
+        stop_words = list(stopwords.words('english'))
+        #sean fill in custom stop words
+        custom_sw = []
+
+    filtered_texts = pre_clean(texts)
+    filtered_texts = number_filter(filtered_texts)
+    filtered_texts = drop_filter(filtered_texts,stop_words,custom_sw)
+        
+    create_df(filtered_texts,labels)
     
